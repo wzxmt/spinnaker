@@ -69,7 +69,7 @@ rm -fr tools
 ### 04-修改docker-registry
 
 ```
-mv ${SPINNAKER_VERSION}.yml ${SPINNAKER_VERSION}/${BOM_DIR}/bom/
+mv ${SPINNAKER_VERSION}.yml ${SPINNAKER_VERSION}/.boms/bom/
 zip -r ${SPINNAKER_VERSION}-Install-Scripts.zip ${SPINNAKER_VERSION}
 ```
 
