@@ -25,7 +25,57 @@ DECK_HOST="http://spinnaker.idevops.site"
 GATE_HOST="http://spin-gate.idevops.site"
 ```
 
-在[actions](https://github.com/zeyangli/spinnaker-cd-install/actions) 中获取最新的版本部署脚本文件。
+## 获取最新的版本部署脚本文件
+
+一台能连接外网的主机
+
+```
+SPINNAKER_VERSION="1.30.2"
+```
+
+### 01-使用Halyard获取bom版本文件
+
+```
+docker run -itd -p 8084:8084 -p 9000:9000 -p 8064:8064 --name halyard  us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
+
+docker exec -u root halyard hal version list
+SPINNAKER_VERSION=1.30.2
+docker exec -u root halyard hal version bom ${SPINNAKER_VERSION} -q -o yaml >${SPINNAKER_VERSION}.yml
+
+mkdir -p .boms/bom ${SPINNAKER_VERSION}
+```
+
+### 02-获取gcr.io镜像
+
+```
+docker run -it  --rm -v `pwd`/:/opt/ python /bin/bash
+pip install pyyaml
+cd /opt && alias ll="ls -la"
+SPINNAKER_VERSION=1.30.2
+python3 tools/fileprocess.py ${SPINNAKER_VERSION}.yml  tagfile.txt .boms
+```
+
+### 03-收集镜像tag文件和下载镜像的脚本
+
+```
+mv .boms tagfile.txt ${SPINNAKER_VERSION}
+## install scripts files
+sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/install.sh
+sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/halyard.sh
+mv tools/* ${SPINNAKER_VERSION}/
+rm -fr tools
+```
+
+### 04-修改docker-registry
+
+```
+sed -i "s#us-docker.pkg.dev\/spinnaker-community\/docker#gcr.io\/spinnaker-marketplace#g" ${SPINNAKER_VERSION}.yml
+mv ${SPINNAKER_VERSION}.yml ${SPINNAKER_VERSION}/${BOM_DIR}/bom/
+zip -r ${SPINNAKER_VERSION}-Install-Scripts.zip ${SPINNAKER_VERSION}
+```
+
+## Spinnaker版本部署
+
 将该文件上传到配置好了kubectl客户端的节点中。
 
 ```
@@ -100,5 +150,4 @@ hal deploy apply --no-validate
 hal config version edit --version local:1.19.4 --no-validate
 hal deploy apply --no-validate
 ```
-
 
