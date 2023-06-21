@@ -69,9 +69,27 @@ rm -fr tools
 ### 04-修改docker-registry
 
 ```
-sed -i "s#us-docker.pkg.dev\/spinnaker-community\/docker#gcr.io\/spinnaker-marketplace#g" ${SPINNAKER_VERSION}.yml
 mv ${SPINNAKER_VERSION}.yml ${SPINNAKER_VERSION}/${BOM_DIR}/bom/
 zip -r ${SPINNAKER_VERSION}-Install-Scripts.zip ${SPINNAKER_VERSION}
+```
+
+### 05-上传镜像
+
+```
+cat << 'EOF' >PushImages.sh
+REGISTRY_URL="us-docker.pkg.dev/spinnaker-community/docker"
+ALIYUN_REGISTRY_URL="registry.cn-shanghai.aliyuncs.com/spinnakercd"
+
+docker login --username=wzxmt666 registry.cn-shanghai.aliyuncs.com
+
+for n in `cat tagfile.txt`
+do
+   docker pull ${REGISTRY_URL}/$n
+   docker tag  ${REGISTRY_URL}/$n ${ALIYUN_REGISTRY_URL}/$n
+   docker push ${ALIYUN_REGISTRY_URL}/$n
+done
+EOF
+sh PushImages.sh
 ```
 
 ## Spinnaker版本部署
