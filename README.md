@@ -76,11 +76,16 @@ zip -r ${SPINNAKER_VERSION}-Install-Scripts.zip ${SPINNAKER_VERSION}
 ### 05-上传镜像
 
 ```
+#登录仓库
+docker login --username=wzxmt666 registry.cn-shanghai.aliyuncs.com
+
 cat << 'EOF' >PushImages.sh
+SPINNAKER_VERSION="1.30.2"
 REGISTRY_URL="us-docker.pkg.dev/spinnaker-community/docker"
 ALIYUN_REGISTRY_URL="registry.cn-shanghai.aliyuncs.com/spinnakercd"
 
-docker login --username=wzxmt666 registry.cn-shanghai.aliyuncs.com
+docker tag us-docker.pkg.dev/spinnaker-community/docker/halyard:stable registry.cn-shanghai.aliyuncs.com/spinnakercd/halyard:${SPINNAKER_VERSION}
+docker push registry.cn-shanghai.aliyuncs.com/spinnakercd/halyard:${SPINNAKER_VERSION}
 
 for n in `cat tagfile.txt`
 do
