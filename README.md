@@ -62,8 +62,8 @@ mv .boms tagfile.txt ${SPINNAKER_VERSION}
 ## install scripts files
 sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/install.sh
 sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/halyard.sh
-mv tools/* ${SPINNAKER_VERSION}/
-rm -fr tools
+cp tools/* ${SPINNAKER_VERSION}/
+rm -fr rosco
 ```
 
 ### 04-修改docker-registry
