@@ -30,7 +30,7 @@ GATE_HOST="http://spin-gate.idevops.site"
 一台能连接外网的主机
 
 ```
-SPINNAKER_VERSION="1.30.2"
+SPINNAKER_VERSION="1.31.0"
 ```
 
 ### 01-使用Halyard获取bom版本文件
@@ -39,7 +39,7 @@ SPINNAKER_VERSION="1.30.2"
 docker run -itd -p 8084:8084 -p 9000:9000 -p 8064:8064 --name halyard  us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
 
 docker exec -u root halyard hal version list
-SPINNAKER_VERSION=1.30.2
+SPINNAKER_VERSION=1.31.0
 docker exec -u root halyard hal version bom ${SPINNAKER_VERSION} -q -o yaml >${SPINNAKER_VERSION}.yml
 
 mkdir -p .boms/bom ${SPINNAKER_VERSION}
@@ -51,7 +51,7 @@ mkdir -p .boms/bom ${SPINNAKER_VERSION}
 docker run -it  --rm -v `pwd`/:/opt/ python /bin/bash
 pip install pyyaml
 cd /opt && alias ll="ls -la"
-SPINNAKER_VERSION=1.30.2
+SPINNAKER_VERSION=1.31.0
 python3 tools/fileprocess.py ${SPINNAKER_VERSION}.yml  tagfile.txt .boms
 cd .boms/rosco && tar zcvf packer.tar.gz packer --remove-file 
 ```
@@ -81,10 +81,11 @@ zip -r ${SPINNAKER_VERSION}-Install-Scripts.zip ${SPINNAKER_VERSION}
 docker login --username=wzxmt666 registry.cn-shanghai.aliyuncs.com
 
 cat << 'EOF' >PushImages.sh
-SPINNAKER_VERSION="1.30.2"
+SPINNAKER_VERSION="1.31.0"
 REGISTRY_URL="us-docker.pkg.dev/spinnaker-community/docker"
 ALIYUN_REGISTRY_URL="registry.cn-shanghai.aliyuncs.com/spinnakercd"
 
+docker pull us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
 docker tag us-docker.pkg.dev/spinnaker-community/docker/halyard:stable registry.cn-shanghai.aliyuncs.com/spinnakercd/halyard:${SPINNAKER_VERSION}
 docker push registry.cn-shanghai.aliyuncs.com/spinnakercd/halyard:${SPINNAKER_VERSION}
 
