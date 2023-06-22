@@ -53,6 +53,7 @@ pip install pyyaml
 cd /opt && alias ll="ls -la"
 SPINNAKER_VERSION=1.30.2
 python3 tools/fileprocess.py ${SPINNAKER_VERSION}.yml  tagfile.txt .boms
+cd .boms/rosco && tar zcvf packer.tar.gz packer --remove-file 
 ```
 
 ### 03-收集镜像tag文件和下载镜像的脚本
@@ -63,7 +64,7 @@ mv .boms tagfile.txt ${SPINNAKER_VERSION}
 sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/install.sh
 sed -i "s/SPIN_VERSION/${SPINNAKER_VERSION}/g" tools/halyard.sh
 cp tools/* ${SPINNAKER_VERSION}/
-rm -fr rosco
+rm -fr rosco 
 ```
 
 ### 04-修改docker-registry
