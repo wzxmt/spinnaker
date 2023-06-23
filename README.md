@@ -30,7 +30,7 @@ GATE_HOST="http://spin-gate.idevops.site"
 一台能连接外网的主机
 
 ```
-SPINNAKER_VERSION="1.31.0"
+SPINNAKER_VERSION="1.26.7"
 ```
 
 ### 01-使用Halyard获取bom版本文件
@@ -39,7 +39,7 @@ SPINNAKER_VERSION="1.31.0"
 docker run -itd -p 8084:8084 -p 9000:9000 -p 8064:8064 --name halyard  us-docker.pkg.dev/spinnaker-community/docker/halyard:stable
 
 docker exec -u root halyard hal version list
-SPINNAKER_VERSION=1.31.0
+SPINNAKER_VERSION=1.26.7
 docker exec -u root halyard hal version bom ${SPINNAKER_VERSION} -q -o yaml >${SPINNAKER_VERSION}.yml
 
 mkdir -p .boms/bom ${SPINNAKER_VERSION}
@@ -48,10 +48,11 @@ mkdir -p .boms/bom ${SPINNAKER_VERSION}
 ### 02-获取gcr.io镜像
 
 ```
-docker run -it  --rm -v `pwd`/:/opt/ python /bin/bash
+#docker run -it  --rm -v `pwd`/:/opt/ python /bin/bash
+docker run -it  --rm -v `pwd`/:/opt/ registry.cn-shanghai.aliyuncs.com/spinnakercd/python:latest /bin/bash
 pip install pyyaml
 cd /opt && alias ll="ls -la"
-SPINNAKER_VERSION=1.31.0
+SPINNAKER_VERSION=1.26.7
 python3 tools/fileprocess.py ${SPINNAKER_VERSION}.yml  tagfile.txt .boms
 cd .boms/rosco && tar zcvf packer.tar.gz packer --remove-file 
 ```
