@@ -1,0 +1,52 @@
+artifactSources:
+  debianRepository: https://dl.bintray.com/spinnaker-releases/debians
+  dockerRegistry: us-docker.pkg.dev/spinnaker-community/docker
+  gitPrefix: https://github.com/spinnaker
+  googleImageProject: marketplace-spinnaker-release
+dependencies:
+  consul:
+    version: 0.7.5
+  redis:
+    version: 2:2.8.4-2
+  vault:
+    version: 0.7.0
+services:
+  clouddriver:
+    commit: 4801f1b941d0fab498d58c6076b6ec28bb1a8aaa
+    version: local:8.0.4-20210625060028
+  deck:
+    commit: ef229a1b4c8e244daa5633716f2c90919f2eda1b
+    version: local:3.7.2-20210614020020
+  defaultArtifact: {}
+  echo:
+    commit: c07bbcda66bd65c70ccf7752f64eeec8099d7721
+    version: local:2.17.1-20210429125836
+  fiat:
+    commit: c02e0925f4bd21f9469470ccd34e0d2112cf5249
+    version: local:1.16.0-20210422230020
+  front50:
+    commit: 2baacb34cab129cc262571b7384f0e1789d7cd21
+    version: local:0.27.1-20210625161956
+  gate:
+    commit: c6d4f98836058f6966ab130cd3a0e3025555d782
+    version: local:1.22.2-20211214195244
+  igor:
+    commit: ef6173ba8cb268fd1345885d3d8b49b0f5046b42
+    version: local:1.16.0-20210422230020
+  kayenta:
+    commit: 7a7acb0d07d4e325d68ff5655887074252aa410f
+    version: local:0.21.0-20210322140019
+  monitoring-daemon:
+    commit: f0082479844588a0d139e34077d2f689736eba15
+    version: local:0.19.3-20210415230021
+  monitoring-third-party:
+    commit: f0082479844588a0d139e34077d2f689736eba15
+    version: local:0.19.3-20210415230021
+  orca:
+    commit: 730b076879a517cd0307f55a15ca59ae00a260d5
+    version: local:2.20.3-20210630022216
+  rosco:
+    commit: 0dd3f3988cb134581edca4aaff74fe34b4f518d8
+    version: local:0.25.0-20210422230020
+timestamp: '2021-12-15 01:05:17'
+version: 1.26.7

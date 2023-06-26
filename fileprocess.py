@@ -1,5 +1,3 @@
-#!usr/bin/env python
-# -*- coding:utf-8 _*-
 import yaml
 import sys
 import os 
@@ -29,20 +27,7 @@ class SpinnakerToDo(object):
         print(serviceData.keys())
 
         return serviceData
-
-    ## 获取版本信息
-    def GetYamlTag(self):
-        print("======> get yaml data <======")
-        with open(self.filePath, 'r', encoding="utf-8") as read_f:
-            fileData = read_f.read()
-        ## 转换dict
-        data = yaml.load(fileData,Loader=yaml.FullLoader)
-        tag = data['version']
-        tag=tag.split('.')
-        tag[-1]="x"
-        tag='.'.join(tag)
-        return "release-" + tag
-
+    
     ## 生成镜像tag文件
     def CreateTagFile(self):
         print("======> Get Tag <======")
@@ -60,11 +45,10 @@ class SpinnakerToDo(object):
     ## 生成服务配置文件（首先用户会将当前版本的bom文件打包上传到updates目录中）
     def CreateServiceConf(self):
         serviceData = self.GetYamlData()
-        tag=self.GetYamlTag()
         for s in serviceData.keys():
             if  s not in  self.exceptServices :
                 serviceVersion = serviceData[s]['version']
-                #tag = "version-" + serviceVersion.split("-")[0]
+                tag = "version-" + serviceVersion.split("-")[0]
                 print(s  + ">>>>===GitHub Tag Version===>>>>" + tag)
                 ## 创建一个服务目录
                 createDirCmd = "mkdir -p %s/%s/%s" %(self.bomDir, s, serviceVersion )
@@ -79,8 +63,8 @@ class SpinnakerToDo(object):
                 if s == "monitoring-daemon":
                     serviceFile = 'spinnaker-monitoring.yml'
                     ## 下载服务配置文件，放到服务目录下
-                    ## https://raw.githubusercontent.com/spinnaker/spinnaker-monitoring/release-1.27.x/spinnaker-monitoring-daemon/halconfig/spinnaker-monitoring.yml
-                    cmd1 = "curl %s/%s/%s/spinnaker-monitoring-daemon/halconfig/%s -o %s/%s/%s" %(self.gitRepo, 'spinnaker-monitoring', 'master', serviceFile, self.bomDir, s, serviceFile )
+                    ## https://raw.githubusercontent.com/spinnaker/spinnaker-monitoring/version-0.18.1/spinnaker-monitoring-daemon/halconfig/spinnaker-monitoring.yml
+                    cmd1 = "curl %s/%s/%s/spinnaker-monitoring-daemon/halconfig/%s -o %s/%s/%s" %(self.gitRepo, 'spinnaker-monitoring', tag, serviceFile, self.bomDir, s, serviceFile )
                     os.system(cmd1)
                     cmd2 = "cp %s/%s/%s %s/%s/%s/%s" %(self.bomDir, s, serviceFile, self.bomDir,  s, serviceVersion, serviceFile )
                     os.system(cmd2)

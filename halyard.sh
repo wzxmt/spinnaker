@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="SPIN_VERSION"
+VERSION="1.26.7"
 DECK_HOST="http://spinnaker.idevops.site"
 GATE_HOST="http://spin-gate.idevops.site"
 until hal --ready; do sleep 10 ; done
