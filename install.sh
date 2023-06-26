@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.26.7"
+VERSION="1.30.2"
 S_REGISTRY="gcr.io/spinnaker-marketplace"
 T_REGISTRY="registry.cn-beijing.aliyuncs.com/spinnaker-cd"
 BOMS_DIR="/root/.hal/"
