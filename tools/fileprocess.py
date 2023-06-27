@@ -27,7 +27,6 @@ class SpinnakerToDo(object):
         print(data['services'])
         serviceData = data['services']
         print(serviceData.keys())
-
         return serviceData
 
     ## 获取版本信息
@@ -53,9 +52,8 @@ class SpinnakerToDo(object):
             if  s not in  self.exceptServices : 
                 print(s + ":" + serviceData[s]['version'])
                 tag = s + ":" + serviceData[s]['version']
-                f = open(self.tagFile, 'a')
-                f.write(tag + "\n")
-                f.close()
+                with open(self.tagFile, 'a') as f_write:
+                	f_write.write(tag + "\n")
 
     ## 生成服务配置文件（首先用户会将当前版本的bom文件打包上传到updates目录中）
     def CreateServiceConf(self):
@@ -64,7 +62,6 @@ class SpinnakerToDo(object):
         for s in serviceData.keys():
             if  s not in  self.exceptServices :
                 serviceVersion = serviceData[s]['version']
-                #tag = "version-" + serviceVersion.split("-")[0]
                 print(s  + ">>>>===GitHub Tag Version===>>>>" + tag)
                 ## 创建一个服务目录
                 createDirCmd = "mkdir -p %s/%s/%s" %(self.bomDir, s, serviceVersion )
@@ -108,26 +105,21 @@ class SpinnakerToDo(object):
         fileData = file.read()
         file.close()
         data = yaml.load(fileData,Loader=yaml.FullLoader)
-        #serviceData = self.GetYamlData()
         for s in data['services'].keys():
             if s != "defaultArtifact" :
                 serviceVersion = data['services'][s]['version']
                 data['services'][s]['version'] = "local:" + serviceVersion
         
-        
         data = yaml.dump(data)
         print(data)
         os.system("rm -fr " + self.filePath)
-        f = open(self.filePath, 'a')
-        f.write(data)
-        f.close()
+        with open(self.filePath, 'a') as f_write:
+          f_write.write(data)
 
     def main(self):
         self.CreateTagFile()
         self.CreateServiceConf()
         self.UpdateBomVersionFile()
-
-
 
 if __name__ == '__main__':
     sp = SpinnakerToDo()
